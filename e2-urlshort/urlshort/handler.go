@@ -1,7 +1,15 @@
 package urlshort
 
 import (
+	"errors"
 	"net/http"
+)
+
+var (
+	// ErrEmptyMapNoDefault is returned if the map length is zero and there
+	// is no default handler.  To prevent situtations where there is no default
+	// behavior always provide a fallback.
+	ErrEmptyMapNoDefault = errors.New("urlshort: Empty Map with no Default Handler")
 )
 
 // MapHandler will return an http.HandlerFunc (which also
@@ -11,8 +19,7 @@ import (
 // If the path is not provided in the map, then the fallback
 // http.Handler will be called instead.
 func MapHandler(pathsToUrls map[string]string, fallback http.Handler) (http.HandlerFunc, error) {
-	//	TODO: Implement this...
-	return nil, nil
+	return mapHandler(pathsToUrls, fallback)
 }
 
 // YAMLHandler will parse the provided YAML and then return
