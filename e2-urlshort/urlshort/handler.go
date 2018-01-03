@@ -10,6 +10,7 @@ var (
 	// is no default handler.  To prevent situtations where there is no default
 	// behavior always provide a fallback.
 	ErrEmptyMapNoDefault = errors.New("urlshort: Empty Map with no Default Handler")
+	ErrYAMLParseError    = errors.New("urlshort: YAML parse error")
 )
 
 // MapHandler will return an http.HandlerFunc (which also
@@ -39,6 +40,5 @@ func MapHandler(pathsToUrls map[string]string, fallback http.Handler) (http.Hand
 // See MapHandler to create a similar http.HandlerFunc via
 // a mapping of paths to urls.
 func YAMLHandler(yml []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	// TODO: Implement this...
-	return nil, nil
+	return yamlHandler(yml, fallback)
 }
