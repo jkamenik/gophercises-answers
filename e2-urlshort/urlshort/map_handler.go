@@ -28,8 +28,9 @@ func mapHandler(paths map[string]string, fallback http.Handler) (http.HandlerFun
 			fmt.Println("checking " + url + " " + redirect)
 			if url == reqURLString {
 				fmt.Printf("Redirecting %v to %v\n", url, redirect)
-				w.WriteHeader(http.StatusMovedPermanently)
-				w.Write([]byte(redirect))
+				http.Redirect(w, r, redirect, http.StatusMovedPermanently)
+				// w.WriteHeader(http.StatusMovedPermanently)
+				// w.Write([]byte(redirect))
 				return
 			}
 		}

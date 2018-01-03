@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -79,7 +80,8 @@ func TestNonFallback(t *testing.T) {
 		t.Errorf("expected code '%v', got '%v'", http.StatusMovedPermanently, rr.Code)
 	}
 
-	if rr.Body.String() != "/bar" {
+	// This should be redirect link
+	if !strings.Contains(rr.Body.String(), "/bar") {
 		t.Errorf("expected body '%v', got '%v'", "/bar", rr.Body.String())
 	}
 
