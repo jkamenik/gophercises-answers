@@ -1,14 +1,18 @@
 package urlshort
 
 import (
-	"errors"
 	"net/http"
 
 	yaml "gopkg.in/yaml.v2"
 )
 
 func yamlHandler(yml []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	return nil, errors.New("Foo")
+	urls, err := parseYAML(yml)
+	if err != nil {
+		return nil, err
+	}
+
+	return MapHandler(urls, fallback)
 }
 
 type urlPath struct {
