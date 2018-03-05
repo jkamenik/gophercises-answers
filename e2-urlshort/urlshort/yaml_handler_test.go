@@ -22,12 +22,10 @@ func TestYAMLToMap(t *testing.T) {
 		yamlTestInput{
 			`
 - url: http://google.com
-	path: /foo
-			`,
+  path: /foo`,
 			nil,
 			map[string]string{
-				"url":  "http://google.com",
-				"path": "/foo",
+				"/foo": "http://google.com",
 			},
 		},
 		yamlTestInput{
@@ -35,31 +33,36 @@ func TestYAMLToMap(t *testing.T) {
 - url: http://yahoo.com
   path: /bar
   ignored: true
-	    `,
+`,
 			nil,
 			map[string]string{
-				"url":  "http://yahoo.com",
-				"path": "/bar",
+				"/bar": "http://yahoo.com",
 			},
 		},
 		yamlTestInput{
 			`
 - URL: bad
-			`,
-			ErrYAMLParseError,
+`,
 			nil,
+			map[string]string{},
 		},
 	}
 
 	for _, y := range yaml {
 		maps, err := parseYAML([]byte(y.yaml))
 
-		if err != y.err {
-			t.Errorf("error '%v' is not '%v' for '%v'", err, y.err, y.yaml)
+		if y.err != nil {
+			// we expect the input to be a failure
+			if err == nil {
+				t.Error("Expected an error, but none found")
+			}
 		}
 
-		if !reflect.DeepEqual(maps, y.parsed) {
-			t.Errorf("map '%v' is not '%v' for '%v'", maps, y.parsed, y.yaml)
+		if y.parsed != nil {
+			// expect the values to equal
+			if !reflect.DeepEqual(maps, y.parsed) {
+				t.Errorf("map '%v' is not '%v' for '%v'", maps, y.parsed, y.yaml)
+			}
 		}
 	}
 }

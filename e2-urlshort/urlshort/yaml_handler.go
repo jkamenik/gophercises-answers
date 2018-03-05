@@ -2,7 +2,6 @@ package urlshort
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	yaml "gopkg.in/yaml.v2"
@@ -17,13 +16,20 @@ type urlPath struct {
 	Path string `yaml: path`
 }
 
-func parseYAML(yml []byte) (map[string]string, error) {
+func parseYAML(yml []byte) (urls map[string]string, err error) {
 	var data []urlPath
+	urls = make(map[string]string)
 
-	err := yaml.Unmarshal(yml, data)
+	err = yaml.Unmarshal(yml, &data)
 	if err != nil {
-		return nil, err
+		return
 	}
-	fmt.Printf("yaml data: %v\n", data)
-	return nil, nil
+
+	for _, item := range data {
+		if item.Path == "" || item.URL == "" {
+			continue
+		}
+		urls[item.Path] = item.URL
+	}
+	return
 }
