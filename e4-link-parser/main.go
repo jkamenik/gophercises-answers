@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	file := flag.String("file", "", "HTML file to parse the links from.")
+	file := flag.String("file", "ex1.html", "HTML file to parse the links from.")
 	flag.Parse()
 	fmt.Printf("Parsing %s.\n", *file)
 
